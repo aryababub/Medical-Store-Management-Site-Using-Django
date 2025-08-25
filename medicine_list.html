@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>My Medicines</h2>
+
+<form method="GET">
+    <input type="text" name="search" placeholder="Search medicine..." value="{{ search }}">
+    <button type="submit">Search</button>
+</form>
+
+<ul>
+    {% for medicine in page_obj %}
+        <li>
+            <strong>{{ medicine.name }}</strong> - {{ medicine.stock }} units - Added on {{ medicine.added_time }}
+            [<a href="{% url 'edit_medicine' medicine.pk %}">Edit</a>]
+            [<a href="{% url 'delete_medicine' medicine.pk %}">Delete</a>]
+        </li>
+    {% empty %}
+        <li>No medicines found.</li>
+    {% endfor %}
+</ul>
+
+<div>
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}&search={{ search }}">Previous</a>
+    {% endif %}
+    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&search={{ search }}">Next</a>
+    {% endif %}
+</div>
+
+{% endblock %}
